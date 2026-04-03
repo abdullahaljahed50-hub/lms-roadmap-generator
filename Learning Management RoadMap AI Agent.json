@@ -1,0 +1,518 @@
+{
+  "name": "Learning Management RoadMap AI Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Professional Profile Registration",
+        "formDescription": " Please provide your contact details and a brief summary of your professional background. This information helps us categorize your expertise and stay in touch.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "E-mail",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Phone Number",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Summary",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Profession",
+              "fieldType": "checkbox",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "AI Automation Engineer"
+                  },
+                  {
+                    "option": "Brand Identity Designer"
+                  },
+                  {
+                    "option": "Online Business Manager"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        -1296,
+        -208
+      ],
+      "id": "13b19694-41fa-4a07-bba4-9b51c1502640",
+      "name": "On form submission",
+      "webhookId": "a5ccf640-23a3-48d6-a0c0-8b626ee08abf"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.fields.Profession[0] }}",
+                    "rightValue": "AI Automation Engineer",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "2cdc5058-4a83-4b5c-a587-004452e15cfc"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "e79cde2c-7681-4b8b-8392-015e2b0bb261",
+                    "leftValue": "={{ $json.fields.Profession[0] }}",
+                    "rightValue": "Brand Identity Designer",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "468ad7de-3856-404b-8dfd-3dbf727a5c50",
+                    "leftValue": "={{ $json.fields.Profession[0] }}",
+                    "rightValue": "Online Business Manager",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -848,
+        -224
+      ],
+      "id": "46c5799b-face-4418-8a6a-6e73bae1ee9e",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a professional AI tutor and career mentor.\nYour role is to create a clear, step-by-step learning roadmap for the user based on their input.\nThe user will provide their name, email, and the subject or skill they want to learn.\nName:{{ $('On form submission').item.json.Name }}\nE-mail: {{ $('On form submission').item.json['E-mail'] }}\nPhone Number : {{ $('On form submission').item.json['Phone Number'] }}\n\nProfession: {{ $('On form submission').item.json.Profession }}\n\n\nInstructions:\n\n1. Greet the user by their name.\n2. Confirm their chosen topic of learning.\n3. Generate a structured learning roadmap with levels: Beginner → Intermediate → Advanced.\n4. For each level, include:\n   - Key concepts to learn\n   - Recommended resources (online courses, books, videos, tools)\n   - Practical exercises or projects\n5. Suggest an estimated timeline (weeks/months) to complete each level.\n6. End with motivational guidance and next steps.\n7. Keep the tone friendly, encouraging, and easy to understand.\n8. Always format the response clearly with headings and bullet points for readability.\n9. Do NOT include the email in the response. Only use it internally if needed.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -512,
+        -208
+      ],
+      "id": "f1eee6e4-b42b-4bad-b09f-f2ee012cf7d7",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        48
+      ],
+      "id": "bcec6247-8230-4e08-be82-1f8dfc63ae7a",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "l5Ys8vmBKK0hfG3A",
+          "name": "Google Gemini(PaLM) Api account 27"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "base": {
+          "__rl": true,
+          "value": "apptN4HBYNk6uUme5",
+          "mode": "list",
+          "cachedResultName": "Airtable",
+          "cachedResultUrl": "https://airtable.com/apptN4HBYNk6uUme5"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblgTJWb8DKEncFK1",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/apptN4HBYNk6uUme5/tblgTJWb8DKEncFK1"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Roadmap": "={{ $json.output }}",
+            "id": "={{ $('Save Data').item.json.id }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "E-mail",
+              "displayName": "E-mail",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Profession",
+              "displayName": "Profession",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "options": [
+                {
+                  "name": "AI Automation Engineer",
+                  "value": "AI Automation Engineer"
+                },
+                {
+                  "name": "Brand Identity Designer",
+                  "value": "Brand Identity Designer"
+                },
+                {
+                  "name": "Online Business Manager",
+                  "value": "Online Business Manager"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Roadmap",
+              "displayName": "Roadmap",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -192,
+        -208
+      ],
+      "id": "b3a0bd3d-bd1e-4fec-b4bf-736897ac2f3d",
+      "name": "Update record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "jzxaLs1fvnIUcREy",
+          "name": "n8n"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "apptN4HBYNk6uUme5",
+          "mode": "list",
+          "cachedResultName": "Airtable",
+          "cachedResultUrl": "https://airtable.com/apptN4HBYNk6uUme5"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblgTJWb8DKEncFK1",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/apptN4HBYNk6uUme5/tblgTJWb8DKEncFK1"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Profession": "={{ $json.Profession }}",
+            "Phone Number": "={{ $json['Phone Number'] }}",
+            "Name": "={{ $json.Name }}",
+            "E-mail": "={{ $json['E-mail'] }}",
+            "Summary": "={{ $json.Summary }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "E-mail",
+              "displayName": "E-mail",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Phone Number",
+              "displayName": "Phone Number",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Profession",
+              "displayName": "Profession",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "options": [
+                {
+                  "name": "AI Automation Engineer",
+                  "value": "AI Automation Engineer"
+                },
+                {
+                  "name": "Brand Identity Designer",
+                  "value": "Brand Identity Designer"
+                },
+                {
+                  "name": "Online Business Manager",
+                  "value": "Online Business Manager"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -1072,
+        -208
+      ],
+      "id": "59b74a2f-1b15-4f1b-89ca-a8881f9403fa",
+      "name": "Save Data",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "jzxaLs1fvnIUcREy",
+          "name": "n8n"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Save Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Update record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Data": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "4a2687bd-5d6a-4de3-960e-100e480457b8",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dc9e9d9b5ac2c2649067ce8b8e3dacc327e85ee95b1358b61270823ac820c66d"
+  },
+  "id": "FXAlpKuF1evZ2Zoj",
+  "tags": []
+}
